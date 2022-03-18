@@ -5,6 +5,11 @@ const setup = require("./setup.js");
 
 
 
+app.get('/', function (req, res) {
+  res.send('hello')
+});
+
+
 setup.message();
 
 // app.get('/', (req,res)=>{
@@ -15,9 +20,6 @@ setup.message();
 //     })
 //     res.send("pretty cool stuff")
 // })
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());
-
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
