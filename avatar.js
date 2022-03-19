@@ -38,9 +38,9 @@ exports.createAvatar = function createAvatar(name,userId){
         });
         db.collection('avatars').doc( `${userId}`).collection('assignment').doc('example').set({
             'name': "Engine Math Tutorial 1",
-            'due-date': "20-03-2022",
+            'duedate': "20-03-2022",
             'unixdate':"1647734400",
-            'due-time':"2359",
+            'duetime':"2359",
         });
         db.collection('avatars').doc( `${userId}`).collection('meeting').doc('example').set({
             'name': "Final Year Project Meeting",
@@ -171,7 +171,7 @@ function renderData(doc){
     var date = doc.data().duedate;
     var time = doc.data().duetime;
     console.log('rendering data');
-    const reply = 'name:'+ name +'\ndate:'+ date + '\ntime:' + time + '\n\n';
+    const reply = 'name: '+ name +'\ndate: '+ date + '\ntime: ' + time + '\n\n';
     // console.log(reply);
     return reply;
 }
@@ -204,7 +204,7 @@ function renderMoreData(doc){
     var timeStart = doc.data().timestart;
     var timeEnd = doc.data().timeend;
     console.log('rendering data');
-    const reply = 'name:'+ name +'\n date:'+ date + '\n time:' + timeStart +"-" + timeEnd;
+    const reply = 'name: '+ name +'\ndate: '+ date + '\ntime: ' + timeStart +"-" + timeEnd + '\n\n';
     // console.log(reply);
     return reply;
 }
@@ -232,6 +232,54 @@ exports.getUpcomingQuiz = async function getUpcomingQuiz(userId,dateIn) {
         } 
 
 }
+exports.getUpcomingExam = async function getUpcomingExam(userId,dateIn) {
+    const userRefAssign = db.collection("avatars").doc(`${userId}`).collection('exam');
+    const sevDaysLater = dateIn + (86400 * 7);
+    console.log(dateIn);
+    let snapshot;
+    try{
+         snapshot = await userRefAssign.where('unixdate', '>=', `${dateIn}`).where('unixdate', '<=', `${sevDaysLater}`).get();
+     
+    } catch(e){
+        console.log(e);
+    }
+    // console.log(snapshot.docs.map((d)=>d.data()))
+    if (snapshot.empty) {
+        var normdate = timeConverter(dateIn);
+        var normsevdate = timeConverter(sevDaysLater);
+        var reply = `No exams between ${normdate} & ${normsevdate}`;
+        // console.log(reply);
+        return reply;
+        } else{
+            var assignDocs = snapshot.docs.map(doc => renderMoreData(doc))
+            return assignDocs;
+        } 
+    }
+    
+    exports.getUpcomingMeeting = async function getUpcomingMeeting(userId,dateIn) {
+        const userRefAssign = db.collection("avatars").doc(`${userId}`).collection('meeting');
+        const sevDaysLater = dateIn + (86400 * 7);
+        console.log(dateIn);
+        let snapshot;
+        try{
+             snapshot = await userRefAssign.where('unixdate', '>=', `${dateIn}`).where('unixdate', '<=', `${sevDaysLater}`).get();
+         
+        } catch(e){
+            console.log(e);
+        }
+        // console.log(snapshot.docs.map((d)=>d.data()))
+        if (snapshot.empty) {
+            var normdate = timeConverter(dateIn);
+            var normsevdate = timeConverter(sevDaysLater);
+            var reply = `No meetings between ${normdate} & ${normsevdate}`;
+            // console.log(reply);
+            return reply;
+            } else{
+                var assignDocs = snapshot.docs.map(doc => renderMoreData(doc))
+                return assignDocs;
+            } 
+        }
+
 function timeConverter(UNIX_timestamp){
     var a = new Date(UNIX_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];

@@ -340,7 +340,7 @@ bot.onText(/Upcoming Assignments/,async function(msg){
   var date = msg.date;
   
     // console.log(avatar.getUpcoming(userId,date));
-    const assignreply = await avatar.getUpcomingAssignments(userId,date);
+    var assignreply = await avatar.getUpcomingAssignments(userId,date);
     const formatreply = assignreply.join("");
     console.log(formatreply);
     bot.sendMessage(chatId, '*Assignments* \n' + formatreply.toString(),opts = {reply_markup:  
@@ -356,12 +356,60 @@ bot.onText(/Upcoming Quizzes/,async function(msg){
   var date = msg.date;
   
     // console.log(avatar.getUpcoming(userId,date));
-    const assignreply = await avatar.getUpcomingQuiz(userId,date);
-    console.log(assignreply);
-    bot.sendMessage(chatId, '*Quizzes* \n' + assignreply.toString(),opts = {reply_markup:  
+    var quizzesreply = await avatar.getUpcomingQuiz(userId,date);
+    console.log(quizzesreply);
+    bot.sendMessage(chatId, '*Quizzes* \n' + quizzesreply.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
       }), parse_mode:'Markdown'
+    });
+})
+bot.onText(/Upcoming Exams/,async function(msg){
+  var userId = msg.from.id; 
+  var chatId = msg.chat.id;
+  var date = msg.date;
+  
+    // console.log(avatar.getUpcoming(userId,date));
+    var examreply = await avatar.getUpcomingExam(userId,date);
+    console.log(examreply);
+    bot.sendMessage(chatId, '*Exams* \n' + examreply.toString(),opts = {reply_markup:  
+      JSON.stringify({
+        remove_keyboard: true,
+      }), parse_mode:'Markdown'
+    });
+})
+bot.onText(/Upcoming Meetings/,async function(msg){
+  var userId = msg.from.id; 
+  var chatId = msg.chat.id;
+  var date = msg.date;
+  
+    // console.log(avatar.getUpcoming(userId,date));
+    var meetingreply = await avatar.getUpcomingMeeting(userId,date);
+    console.log(meetingreply);
+    bot.sendMessage(chatId, '*Meetings* \n' + meetingreply.toString(),opts = {reply_markup:  
+      JSON.stringify({
+        remove_keyboard: true,
+      }),
+       parse_mode:'Markdown'
+    });
+})
+bot.onText(/All upcoming/,async function(msg){
+  var userId = msg.from.id; 
+  var chatId = msg.chat.id;
+  var date = msg.date;
+  
+    // console.log(avatar.getUpcoming(userId,date));
+    var meetingreply = await avatar.getUpcomingMeeting(userId,date);
+    var assignreply = await avatar.getUpcomingAssignments(userId,date);
+    var examreply = await avatar.getUpcomingExam(userId,date);
+    var quizzesreply = await avatar.getUpcomingQuiz(userId,date);
+
+    bot.sendMessage(chatId, 
+      '*Assignments*\n' + assignreply.join("").toString()+ '*Meetings*\n' + meetingreply.join("").toString()+ '*Exams*\n' + examreply.join("").toString() + '*Quizzes*\n' + quizzesreply.join("").toString(),opts = {reply_markup:  
+      JSON.stringify({
+        remove_keyboard: true,
+      }), 
+      parse_mode:'Markdown'
     });
 })
   bot.onText(/Cancel/,function(msg){
