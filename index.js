@@ -10,8 +10,6 @@ app.get('/', function (req, res) {
 });
 
 
-// setup.message();
-
 // app.get('/', (req,res)=>{
 //     // creation of new document
 //     db.collection("avatars").doc("zonghan").set({
