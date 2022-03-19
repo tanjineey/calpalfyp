@@ -429,4 +429,4 @@ bot.onText(/All upcoming/,async function(msg){
     bot.sendMessage(chatId, resp);
   });
 
-
+module.exports = {bot};
