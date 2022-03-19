@@ -12,7 +12,6 @@ else {
   var token = '5084768499:AAGjpvhbDCY45Ay-Ac5Z1UsQ1f5QNHmbR6Q';
   bot = new TelegramBot(token, { polling: true });
 }  
-function message(){
   const getname = async(chatId, prompt) =>{
     const sendPrompt = async (prompt) =>{
       const sentPrompt = await bot.sendMessage(chatId,prompt,{
@@ -130,13 +129,13 @@ function message(){
   }
 
 
-  bot.onText(/\/start/, function(msg)  {
+  bot.onText(/\/start/,  function(msg)  {
     const userId = msg.from.id;
     const chatId = msg.chat.id;
     const date = msg.date;
   var CronJob = require('cron').CronJob;
-  var job = new CronJob('00 05 21 * * 0-6', function() {
-    var getUpcoming = avatar.getUpcoming(userId,date);
+  var job = new CronJob('00 05 21 * * 0-6', async function() {
+    var getUpcoming = await avatar.getUpcoming(userId,date);
     console.log(getUpcoming);
     var reply = `Good Morning, here's what's upcoming in your week ahead: \n ${getUpcoming}`;
     bot.sendMessage(chatId,reply);
@@ -431,5 +430,4 @@ bot.onText(/All upcoming/,async function(msg){
     bot.sendMessage(chatId, resp);
   });
 
-}
-module.exports={message};
+

@@ -10,7 +10,7 @@ app.get('/', function (req, res) {
 });
 
 
-setup.message();
+// setup.message();
 
 // app.get('/', (req,res)=>{
 //     // creation of new document
