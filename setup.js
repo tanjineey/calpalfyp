@@ -1,15 +1,14 @@
-var token = process.env.TOKEN;
+var token = '5084768499:AAGjpvhbDCY45Ay-Ac5Z1UsQ1f5QNHmbR6Q';
 const TelegramBot = require('node-telegram-bot-api');
 const avatar = require("./avatar.js");
 const keyboard = require("./keyboards.js");
-var bot;
+let bot;
 // Create a bot that uses 'polling' to fetch new updates
 if(process.env.NODE_ENV === 'production') {
-  bot = new TelegramBot(process.env.TOKEN);
-  bot.setWebHook('https://calpalfyp.herokuapp.com/' + process.env.TOKEN);
+  bot = new TelegramBot(token);
+  bot.setWebHook('https://calpalfyp.herokuapp.com/');
 }
 else {
-  var token = '5084768499:AAGjpvhbDCY45Ay-Ac5Z1UsQ1f5QNHmbR6Q';
   bot = new TelegramBot(token, { polling: true });
 }  
   const getname = async(chatId, prompt) =>{
