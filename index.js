@@ -9,10 +9,12 @@ app.use(bodyParser.json());
 app.post('/', (req, res) => {
 setup.bot.processUpdate(req.body);
 res.status(200).json({message:'ok'})
-res.send('ok');
 });
 
-
+app.set('view engine', 'ejs');
+app.get('/',(req,res)=>{
+  res.render('pages/index');
+})
 // app.get('/', (req,res)=>{
 //     // creation of new document
 //     db.collection("avatars").doc("zonghan").set({
