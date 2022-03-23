@@ -26,3 +26,19 @@ exports.upcomingKeyboards ={
         ]
     }),
 }
+exports.editEventKeyboard = {
+    reply_markup: JSON.stringify({
+        keyboard: [
+             ['Edit Quiz','Edit Exam'], ['Edit Assignment','Edit Meeting'],
+             ['Cancel']
+        ]
+    })
+}
+exports.cancelKeyboard = {
+     reply_markup: JSON.stringify({
+        keyboard: [
+             ['Cancel']
+        ],resize_keyboard:true,
+    })
+
+}
