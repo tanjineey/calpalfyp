@@ -34,6 +34,14 @@ exports.editEventKeyboard = {
         ]
     })
 }
+exports.deleteEventKeyboard = {
+    reply_markup: JSON.stringify({
+        keyboard: [
+             ['Delete Quiz','Delete Exam'], ['Delete Assignment','Delete Meeting'],
+             ['Cancel']
+        ]
+    })
+}
 exports.cancelKeyboard = {
      reply_markup: JSON.stringify({
         keyboard: [

@@ -121,6 +121,18 @@ exports.editQuiz = function editQuiz(userId,name,date,timestart,timeend){
     }
     }).catch(err=> console.error(err));
 }
+exports.deleteQuiz = async function deleteQuiz(userId,name){
+    const userRef = db.collection("avatars").doc(`${userId}`).collection("quiz").doc(`${name}`);
+     const doc = await userRef.get();
+   if (!doc.exists) {
+     console.log('No such document exists!');
+     return 'No such document exists!';
+   } else {
+     console.log('Document data:', doc.data());
+     userRef.delete();
+     return `Quiz: ${name} deleted`;
+   }
+}
 exports.creatingExam = function createExam(userId,name,date,timestart, timeend){
     const userRef = db.collection("avatars").doc(`${userId}`);
     function converttounix(date){
@@ -186,6 +198,18 @@ exports.editExam = function editExam(userId,name,date,timestart,timeend){
     }
     }).catch(err=> console.error(err));
 }
+exports.deleteExam = async function deleteExam(userId,name){
+    const userRef = db.collection("avatars").doc(`${userId}`).collection("exam").doc(`${name}`);
+     const doc = await userRef.get();
+   if (!doc.exists) {
+     console.log('No such document exists!');
+     return 'No such document exists!';
+   } else {
+     console.log('Document data:', doc.data());
+     userRef.delete();
+     return `Exam: ${name} deleted`;
+   }
+}
 exports.creatingAssignment = function createAssignment(userId,name,date,time){
     const userRef = db.collection("avatars").doc(`${userId}`);
     console.log('Assignment to be created in database');
@@ -247,6 +271,18 @@ exports.editAssignment = function editAssignment(userId,name,date,time){
       console.log('Assignment not updated.')  
     }
     }).catch(err=> console.error(err));
+}
+exports.deleteAssignment = async function deleteAssignment(userId,name){
+    const userRef = db.collection("avatars").doc(`${userId}`).collection("assignment").doc(`${name}`);
+     const doc = await userRef.get();
+   if (!doc.exists) {
+     console.log('No such document exists!');
+     return 'No such document exists!';
+   } else {
+     console.log('Document data:', doc.data());
+     userRef.delete();
+     return `Assignment: ${name} deleted`;
+   }
 }
 exports.creatingMeeting = function createMeeting(userId,name,date,timestart,timeend){
     const userRef = db.collection("avatars").doc(`${userId}`);
@@ -311,6 +347,18 @@ exports.editMeeting = function editMeeting(userId,name,date,timestart,timeend){
       console.log('Exam not updated.')  
     }
     }).catch(err=> console.error(err));
+}
+exports.deleteMeeting = async function deleteMeeting(userId,name){
+    const userRef = db.collection("avatars").doc(`${userId}`).collection("meeting").doc(`${name}`);
+     const doc = await userRef.get();
+   if (!doc.exists) {
+     console.log('No such document exists!');
+     return 'No such document exists!';
+   } else {
+     console.log('Document data:', doc.data());
+     userRef.delete();
+     return `Meeting: ${name} deleted`;
+   }
 }
 exports.getUpcomingAssignments = async function getUpcomingAssignments(userId,dateIn) {
     const userRefAssign = db.collection("avatars").doc(`${userId}`).collection('assignment');
@@ -522,10 +570,10 @@ exports.editQuizList = async function editQuizList(userId,dateIn) {
         }
         // console.log(snapshot.docs.map((d)=>d.data()))
         if (snapshot.empty) {
-            return false;
+            return `No Quiz with name: ${name}\n\n`;
             } else{
                 var assignDocs = snapshot.docs.map(doc => renderMoreData(doc))
-                return assignDocs;
+                return `Quiz:\n${assignDocs}`;
             } 
     }
     exports.getsearchassign = async function getsearchassign(userId,name) {
@@ -539,10 +587,10 @@ exports.editQuizList = async function editQuizList(userId,dateIn) {
         }
         // console.log(snapshot.docs.map((d)=>d.data()))
         if (snapshot.empty) {
-            return false;
+            return `No Assignment with name: ${name}\n\n`;
         } else{
             var assignDocs = snapshot.docs.map(doc => renderData(doc))
-            return assignDocs;
+            return `Assignment:\n${assignDocs}`;
         } 
     }
     exports.getsearchexam = async function getsearchquiz(userId,name) {
@@ -550,16 +598,16 @@ exports.editQuizList = async function editQuizList(userId,dateIn) {
         let snapshot;
         try{
              snapshot = await userRefAssign.where('name', '==', `${name}`).get();
-         
+            
         } catch(e){
             console.log(e);
         }
         // console.log(snapshot.docs.map((d)=>d.data()))
         if (snapshot.empty) {
-            return false;
+            return `No Exam with name: ${name}\n\n`;
             } else{
                 var assignDocs = snapshot.docs.map(doc => renderMoreData(doc))
-                return assignDocs;
+                return `Exam:\n${assignDocs}`;
             } 
     }
     exports.getsearchmeeting = async function getsearchmeeting(userId,name) {
@@ -573,10 +621,10 @@ exports.editQuizList = async function editQuizList(userId,dateIn) {
         }
         // console.log(snapshot.docs.map((d)=>d.data()))
         if (snapshot.empty) {
-            return false;
+            return `No Meeting with name: ${name}\n\n`;
             } else{
                 var assignDocs = snapshot.docs.map(doc => renderMoreData(doc))
-                return assignDocs;
+                return `Meeting:\n${assignDocs}`;
             } 
     }
 function timeConverter(UNIX_timestamp){

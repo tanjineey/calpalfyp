@@ -13,15 +13,6 @@ res.status(200).json({message:'ok'})
 });
 const user = '205550056'; 
 
-// async function displaydata(user){
-//   var date = Date.now()/1000;
-//   var meetingreply = await avatar.getUpcomingMeeting(user,date);
-//     var assignreply = await avatar.getUpcomingAssignments(user,date);
-//     var examreply = await avatar.getUpcomingExam(user,date);
-//     var quizzesreply = await avatar.getUpcomingQuiz(user,date);
-//     console.log(meetingreply.toString());
-// }
-// displaydata(user);
 
 app.set('view engine', 'ejs');
 app.get('/',async(req,res)=>{

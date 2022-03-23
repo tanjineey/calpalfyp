@@ -514,7 +514,9 @@ bot.onText(/Upcoming Assignments/,async function(msg){
   
     // console.log(avatar.getUpcoming(userId,date));
     var assignreply = await avatar.getUpcomingAssignments(userId,date);
-    bot.sendMessage(chatId, '*Assignments* \n' + assignreply.toString(),opts = {reply_markup:  
+    var formatreply = assignreply.join("");
+
+    bot.sendMessage(chatId, '*💻 Assignments* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
 
@@ -528,8 +530,9 @@ bot.onText(/Upcoming Quizzes/,async function(msg){
   
     // console.log(avatar.getUpcoming(userId,date));
     var quizzesreply = await avatar.getUpcomingQuiz(userId,date);
+    var formatreply = quizzesreply.join("");
     console.log(quizzesreply);
-    bot.sendMessage(chatId, '*Quizzes* \n' + quizzesreply.toString(),opts = {reply_markup:  
+    bot.sendMessage(chatId, '*📋Quizzes* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
       }), parse_mode:'Markdown'
@@ -543,7 +546,9 @@ bot.onText(/Upcoming Exams/,async function(msg){
     // console.log(avatar.getUpcoming(userId,date));
     var examreply = await avatar.getUpcomingExam(userId,date);
     console.log(examreply);
-    bot.sendMessage(chatId, '*Exams* \n' + examreply.toString(),opts = {reply_markup:  
+    var formatreply = examreply.join("");
+
+    bot.sendMessage(chatId, '*📈Exams* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
       }), parse_mode:'Markdown'
@@ -556,8 +561,10 @@ bot.onText(/Upcoming Meetings/,async function(msg){
   
     // console.log(avatar.getUpcoming(userId,date));
     var meetingreply = await avatar.getUpcomingMeeting(userId,date);
+    var formatreply = meetingreply.join("");
+
     console.log(meetingreply);
-    bot.sendMessage(chatId, '*Meetings* \n' + meetingreply.toString(),opts = {reply_markup:  
+    bot.sendMessage(chatId, '*🌞Meetings* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
       }),
@@ -576,7 +583,7 @@ bot.onText(/All upcoming/,async function(msg){
     var quizzesreply = await avatar.getUpcomingQuiz(userId,date);
 
     bot.sendMessage(chatId, 
-      '*Assignments*\n' + assignreply.toString()+ '*Meetings*\n' + meetingreply.toString()+ '*Exams*\n' + examreply.toString() + '*Quizzes*\n' + quizzesreply.toString(),opts = {reply_markup:  
+      '*💻Assignments*\n' + assignreply.join("").toString()+ '*🌞Meetings*\n' + meetingreply.join("").toString()+ '*📈Exams*\n' + examreply.join("").toString() + '*📋Quizzes*\n' + quizzesreply.join("").toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
       }), 
@@ -586,7 +593,7 @@ bot.onText(/All upcoming/,async function(msg){
   bot.onText(/\/edit/, function(msg){
     var userId = msg.from.id;
     var chatId = msg.chat.id;
-    bot.sendMessage(chatId, 'Which category would you like to edit?',keyboard.editEventKeyboard);
+    bot.sendMessage(chatId, 'Which event would you like to edit?',keyboard.editEventKeyboard);
   })
   bot.onText(/Edit Quiz/,async function(msg){
     var userId = msg.from.id; 
@@ -597,7 +604,8 @@ bot.onText(/All upcoming/,async function(msg){
     if(editQuizList.toString().indexOf(noquizzes)!== -1){
       bot.sendMessage(chatId,'There are no quizzes available for you to edit.');
     }else{
-       var nameQuiz = await geteditQuizname(userId, chatId, 'This is a list of your future quizzes.\n' + editQuizList.toString() +'\n Which quiz would you like to edit?(Name of Quiz)');
+      bot.sendMessage(chatId,'This is a list of your future quizzes.\n' + editQuizList.toString());
+       var nameQuiz = await geteditQuizname(userId, chatId, 'Which quiz would you like to edit?(Name of Quiz)');
        if (nameQuiz=="cancel"){
       return;
       }
@@ -639,7 +647,8 @@ bot.onText(/All upcoming/,async function(msg){
     if(editExamList.toString().indexOf(noexams)!== -1){
       bot.sendMessage(chatId,'There are no exams available for you to edit.');
     }else{
-       var nameExam = await geteditExamname(userId, chatId, 'This is a list of your future exams.\n' + editExamList.toString() +'\n Which exam would you like to edit? (Key in name of exam)');
+      bot.sendMessage(chatId,'This is a list of your future exams.\n' + editExamList.toString());
+       var nameExam = await geteditExamname(userId, chatId, '\n Which exam would you like to edit? (Key in name of exam)');
        if (nameExam=="cancel"){
       return;
     }   
@@ -683,7 +692,8 @@ bot.onText(/All upcoming/,async function(msg){
     if(editAssignList.toString().indexOf(noassigns)!== -1){
       bot.sendMessage(chatId,'There are no assignments available for you to edit.');
     }else{
-       var nameAssign = await geteditAssignname(userId, chatId, 'This is a list of your future assignments.\n' + editAssignList.toString() +'\n Which assignment would you like to edit? (Key in name of assignment)');
+      bot.sendMessage(chatId,'This is a list of your future assignments.\n' + editAssignList.toString());
+       var nameAssign = await geteditAssignname(userId, chatId, 'Which assignment would you like to edit? (Key in name of assignment)');
       if (nameAssign=="cancel"){
       return;
       }   
@@ -719,7 +729,8 @@ bot.onText(/All upcoming/,async function(msg){
     if(editMeetingList.toString().indexOf(nomeetings)!== -1){
       bot.sendMessage(chatId,'There are no meetings available for you to edit.');
     }else{
-       var nameMeeting = await geteditMeetingname(userId, chatId, 'This is a list of your future meetings.\n' + editMeetingList.toString() +'\n Which meeting would you like to edit? (Key in name of meeting)');
+      bot.sendMessage(chatId,'This is a list of your future meetings.\n' + editMeetingList.toString());
+       var nameMeeting = await geteditMeetingname(userId, chatId, '\n Which meeting would you like to edit? (Key in name of meeting)');
         if (nameMeeting=="cancel"){
     return;
   }   
@@ -763,33 +774,116 @@ bot.onText(/All upcoming/,async function(msg){
     if (searchreply =='cancel'){
       return;
     }else{
+      // var searchquiz = await avatar.getsearchquiz(userId,searchreply);
+      // if (searchquiz == false){
+      //   console.log('no quizzes with name')
+      //   var searchassign = await avatar.getsearchassign(userId,searchreply);
+      //   if(searchassign == false){
+      //   console.log('no assignments with name')
+      //        var searchexam = await avatar.getsearchexam(userId,searchreply);
+      //         if(searchexam == false){
+      //           console.log('no exams with name')
+      //              var searchmeeting = await avatar.getsearchmeeting(userId,searchreply);
+      //             if(searchmeeting == false){
+      //               console.log('no meetings with name')
+      //               return;
+      //             }else{
+      //               bot.sendMessage(chatId,'We found a meeting relevant to your search: \n' +searchmeeting.toString());
+      //             }
+      //         }else{
+      //           bot.sendMessage(chatId,'We found an exam relevant to your search: \n' +searchexam.toString());
+      //         }
+      //   }else{
+      //     bot.sendMessage(chatId,'We found an assignment relevant to your search: \n' +searchassign.toString());
+      //   }
+      // }else{
+      //   bot.sendMessage(chatId,'We found a quiz relevant to your search: \n' + searchquiz.toString());
+      // }
       var searchquiz = await avatar.getsearchquiz(userId,searchreply);
-      if (searchquiz == false){
-        console.log('no quizzes with name')
-        var searchassign = await avatar.getsearchassign(userId,searchreply);
-        if(searchassign == false){
-        console.log('no assignments with name')
-             var searchexam = await avatar.getsearchexam(userId,searchreply);
-              if(searchexam == false){
-                console.log('no exams with name')
-                   var searchmeeting = await avatar.getsearchmeeting(userId,searchreply);
-                  if(searchmeeting == false){
-                    console.log('no meetings with name')
-                    return;
-                  }else{
-                    bot.sendMessage(chatId,'We found a meeting relevant to your search: \n' +searchmeeting.toString());
-                  }
-              }else{
-                bot.sendMessage(chatId,'We found an exam relevant to your search: \n' +searchexam.toString());
-              }
-        }else{
-          bot.sendMessage(chatId,'We found an assignment relevant to your search: \n' +searchassign.toString());
-        }
-      }else{
-        bot.sendMessage(chatId,'We found a quiz relevant to your search: \n' + searchquiz.toString());
-      }
+      var searchassign = await avatar.getsearchassign(userId,searchreply);
+      var searchexam = await avatar.getsearchexam(userId,searchreply);
+      var searchmeeting = await avatar.getsearchmeeting(userId,searchreply);
+      bot.sendMessage(chatId,searchquiz + searchassign + searchexam + searchmeeting);
+
     }
   })
+  bot.onText(/\/delete/, function(msg){
+    var userId = msg.from.id;
+    var chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'What would you like to delete?',keyboard.deleteEventKeyboard);
+  })
+  bot.onText(/Delete Quiz/,async function(msg){
+    var userId = msg.from.id; 
+    var date = msg.date;
+    var chatId = msg.chat.id;
+    var editQuizList = await avatar.editQuizList(userId,date);
+    var noquizzes = "No quizzes after";
+    if(editQuizList.toString().indexOf(noquizzes)!== -1){
+      bot.sendMessage(chatId,'There are no quizzes available for you to delete.');
+    }else{
+      bot.sendMessage(chatId,'This is a list of your quizzes.\n' + editQuizList.toString() );
+       var nameQuiz = await geteditQuizname(userId, chatId, 'Which quiz would you like to delete?(Name of Quiz)');
+       if (nameQuiz=="cancel"){
+      return;
+      }
+      var quizdelete = await avatar.deleteQuiz(msg.from.id,nameQuiz);
+      bot.sendMessage(chatId, quizdelete);
+    }
+  })
+   bot.onText(/Delete Exam/,async function(msg){
+    var userId = msg.from.id; 
+    var date = msg.date;
+    var chatId = msg.chat.id;
+    var editExamList = await avatar.editExamList(userId,date);
+    var noexams = "No exams after";
+    if(editExamList.toString().indexOf(noexams)!== -1){
+      bot.sendMessage(chatId,'There are no exams available for you to delete.');
+    }else{
+      bot.sendMessage(chatId,'This is a list of your exams.\n' + editExamList.toString() );
+       var nameExam = await geteditExamname(userId, chatId, 'Which exam would you like to delete?(Name of Exam)');
+       if (nameExam=="cancel"){
+      return;
+      }
+      var examdelete = await avatar.deleteExam(msg.from.id,nameExam);
+      bot.sendMessage(chatId, examdelete);
+    }
+  })
+ bot.onText(/Delete Assignment/,async function(msg){
+    var userId = msg.from.id; 
+    var date = msg.date;
+    var chatId = msg.chat.id;
+    var editAssignList = await avatar.editAssignList(userId,date);
+    var noassigns = "No assignments after";
+    if(editAssignList.toString().indexOf(noassigns)!== -1){
+      bot.sendMessage(chatId,'There are no assignments available for you to delete.');
+    }else{
+      bot.sendMessage(chatId,'This is a list of your future assignments.\n' + editAssignList.toString());
+       var nameAssign = await geteditAssignname(userId, chatId, 'Which assignment would you like to delete? (Key in name of assignment)');
+      if (nameAssign=="cancel"){
+      return;
+      }   
+        var assigndelete = await avatar.deleteAssignment(msg.from.id,nameAssign);
+      bot.sendMessage(chatId, assigndelete);
+    }
+ })
+  bot.onText(/Delete Meeting/,async function(msg){
+    var userId = msg.from.id; 
+    var date = msg.date;
+    var chatId = msg.chat.id;
+    var editMeetingList = await avatar.editMeetingList(userId,date);
+    var nomeetings = "No meetings after";
+    if(editMeetingList.toString().indexOf(nomeetings)!== -1){
+      bot.sendMessage(chatId,'There are no meetings available for you to delete.');
+    }else{
+      bot.sendMessage(chatId,'This is a list of your future meetings.\n' + editMeetingList.toString());
+       var nameMeeting = await geteditMeetingname(userId, chatId, '\n Which meeting would you like to delete? (Key in name of meeting)');
+        if (nameMeeting=="cancel"){
+    return;
+  }   
+   var meetingdelete = await avatar.deleteMeeting(msg.from.id,nameMeeting);
+      bot.sendMessage(chatId, meetingdelete);
+    }
+ })
 
   bot.onText(/Cancel/,function(msg){
     var chatId = msg.chat.id;
