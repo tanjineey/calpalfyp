@@ -1,16 +1,16 @@
-var token = '5084768499:AAGjpvhbDCY45Ay-Ac5Z1UsQ1f5QNHmbR6Q';
 const TelegramBot = require('node-telegram-bot-api');
 const avatar = require("./avatar.js");
 const keyboard = require("./keyboards.js");
+const token = require("./token")
 let bot;
 
 // Create a bot that uses 'polling' to fetch new updates
 if(process.env.NODE_ENV === 'production') {
-  bot = new TelegramBot(token);
+  bot = new TelegramBot(token.token);
   bot.setWebHook('https://calpalfyp.herokuapp.com/');
 }
 else {
-  bot = new TelegramBot(token, { polling: true });
+  bot = new TelegramBot(token.token, { polling: true });
 }  
   const getname = async(chatId, prompt) =>{
     const sendPrompt = async (prompt) =>{
@@ -295,7 +295,7 @@ else {
     const chatId = msg.chat.id;
     const date = msg.date;
   var CronJob = require('cron').CronJob;
-  var job = new CronJob('00 04 23 * * 0-6', async function() {
+  var job = new CronJob('00 00 10 * * 0-6', async function() {
   var userId = msg.from.id; 
   var chatId = msg.chat.id;
   var date = msg.date; 
@@ -317,7 +317,7 @@ else {
     
     // const reply = bot.sendMessage(chatId,resp);
     // return bot.sendMessage(chatId,resp);
-    var reply ='Hi ' + msg.chat.first_name +  ' I\'m Calpal. 🙌 Here are a list of commands to get me started! \n \/create - to create a new Quiz, Assignment, Exam or meeting \n \/edit - to edit your created events \n \/scan - to convert a picture you\'ve taken to text \n \/upcoming - to view your upcoming events \n \/todo - to create your todo list for the day  \n \/search - to search for your events by name \n   ';
+    var reply ='Hi ' + msg.chat.first_name +  ' I\'m Calpal. 🙌 Here are a list of commands to get me started! \n \/create - to create a new Quiz, Assignment, Exam or meeting \n \/edit - to edit your created events \n \/upcoming - to view your upcoming events \n \/delete - to delete an existing event  \n \/search - to search for your events by name \n   ';
     var reply2 ='If you would like to stop your action at anytime, just press \/Cancel';
     avatar.createAvatar(msg.chat.first_name, msg.from.id);
     console.log(msg);
@@ -329,7 +329,7 @@ else {
     const chatId = msg.chat.id;
     // const reply = bot.sendMessage(chatId,resp);
     // return bot.sendMessage(chatId,resp);
-    var reply ='Hi ' + msg.chat.first_name +  ' 🙌, I\'m your 🤖\nI\'ve been created to give you all the information you need';
+    var reply ='Hi ' + msg.chat.first_name +  ' 🙌, I\'m your 🤖\nWhat event would you like to create today?';
     bot.sendMessage(chatId,reply,keyboard.createEventKeyboard);
   });
   // //next Message function to detect the next message 
@@ -514,8 +514,12 @@ bot.onText(/Upcoming Assignments/,async function(msg){
   
     // console.log(avatar.getUpcoming(userId,date));
     var assignreply = await avatar.getUpcomingAssignments(userId,date);
+    var noquizzes = "No assignments";
+    if(assignreply.toString().indexOf(noquizzes)!== -1){
+    var formatreply = assignreply;
+    }else{
     var formatreply = assignreply.join("");
-
+    }
     bot.sendMessage(chatId, '*💻 Assignments* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
@@ -530,7 +534,12 @@ bot.onText(/Upcoming Quizzes/,async function(msg){
   
     // console.log(avatar.getUpcoming(userId,date));
     var quizzesreply = await avatar.getUpcomingQuiz(userId,date);
+    var noquizzes = "No quizzes";
+    if(quizzesreply.toString().indexOf(noquizzes)!== -1){
+      formatreply = quizzesreply;
+    }else{
     var formatreply = quizzesreply.join("");
+    }
     console.log(quizzesreply);
     bot.sendMessage(chatId, '*📋Quizzes* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
@@ -546,8 +555,12 @@ bot.onText(/Upcoming Exams/,async function(msg){
     // console.log(avatar.getUpcoming(userId,date));
     var examreply = await avatar.getUpcomingExam(userId,date);
     console.log(examreply);
+    var noquizzes = "No exams";
+    if(examreply.toString().indexOf(noquizzes)!== -1){
+      formatreply = examreply;
+    }else{
     var formatreply = examreply.join("");
-
+    }
     bot.sendMessage(chatId, '*📈Exams* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
@@ -561,8 +574,12 @@ bot.onText(/Upcoming Meetings/,async function(msg){
   
     // console.log(avatar.getUpcoming(userId,date));
     var meetingreply = await avatar.getUpcomingMeeting(userId,date);
-    var formatreply = meetingreply.join("");
-
+    var noquizzes = "No meetings";
+    if(meetingreply.toString().indexOf(noquizzes)!== -1){
+      var formatreply = meetingreply;
+    }else{
+      var formatreply = meetingreply.join("");
+    }
     console.log(meetingreply);
     bot.sendMessage(chatId, '*🌞Meetings* \n' + formatreply.toString(),opts = {reply_markup:  
       JSON.stringify({
@@ -582,8 +599,33 @@ bot.onText(/All upcoming/,async function(msg){
     var examreply = await avatar.getUpcomingExam(userId,date);
     var quizzesreply = await avatar.getUpcomingQuiz(userId,date);
 
+    var nomeetings = "No meetings";
+    if(meetingreply.toString().indexOf(nomeetings)!== -1){
+      formatmeeting = meetingreply;
+    }else{
+    var formatmeeting = meetingreply.join("");
+    }
+    var noassign = "No assignments";
+    if(assignreply.toString().indexOf(noassign)!== -1){
+    var formatassign = assignreply;
+    }else{
+    var formatassign = assignreply.join("");
+    }
+    var noexams = "No exams";
+    if(examreply.toString().indexOf(noexams)!== -1){
+      formatexam= examreply;
+    }else{
+    var formatexam = examreply.join("");
+    }
+    var noquizzes ="No quizzes";
+    if(quizzesreply.toString().indexOf(noquizzes)!== -1){
+      formatquiz = quizzesreply;
+    }else{
+    var formatquiz = quizzesreply.join("");
+    }
+
     bot.sendMessage(chatId, 
-      '*💻Assignments*\n' + assignreply.join("").toString()+ '*🌞Meetings*\n' + meetingreply.join("").toString()+ '*📈Exams*\n' + examreply.join("").toString() + '*📋Quizzes*\n' + quizzesreply.join("").toString(),opts = {reply_markup:  
+      '*💻Assignments*\n' + formatassign.toString()+ '*🌞Meetings*\n' + formatmeeting.toString()+ '*📈Exams*\n' + formatexam.toString() + '*📋Quizzes*\n' + formatquiz.toString(),opts = {reply_markup:  
       JSON.stringify({
         remove_keyboard: true,
       }), 
